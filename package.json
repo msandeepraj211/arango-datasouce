@@ -1,5 +1,5 @@
 {
-  "name": "@danwkennedy/arango-datasource",
+  "name": "msandeepraj211/arango-datasource",
   "version": "0.8.0",
   "description": "An implentation of Apollo's datasources for ArangoDb",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danwkennedy/arango-datasouce.git"
+    "url": "git+https://github.com/msandeepraj211/arango-datasouce.git"
   },
   "keywords": [
     "arangodb",
@@ -21,9 +21,9 @@
   "author": "Daniel Kennedy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/danwkennedy/arango-datasouce/issues"
+    "url": "https://github.com/msandeepraj211/arango-datasouce/issues"
   },
-  "homepage": "https://github.com/danwkennedy/arango-datasouce#readme",
+  "homepage": "https://github.com/msandeepraj211/arango-datasouce#readme",
   "dependencies": {
     "apollo-datasource": "^0.9.0",
     "arangojs": "^7.0.1",
