@@ -1,5 +1,5 @@
 {
-  "name": "msandeepraj211/arango-datasource",
+  "name": "@msandeepraj211/arango-datasource",
   "version": "0.8.0",
   "description": "An implentation of Apollo's datasources for ArangoDb",
   "main": "index.js",

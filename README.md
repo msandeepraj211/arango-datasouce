@@ -1,5 +1,6 @@
 # arango-datasouce
-An implementation of Apollo's datasource for ArangoDb
+
+An implementation of Apollo's datasource for ArangoDb. This repo is fork of the original authour "danwkennedy"
 
 ## Installation
 
@@ -18,7 +19,7 @@ Requires passing the target database instance from `arango-js`
 ```js
 // index.js
 
-const { ArangoDataSource } = require('@danwkennedy/arango-datasource');
+const { ArangoDataSource } = require('@msandeepraj211/arango-datasource');
 const { Database } = require('arango-js');
 
 // initialize the db
@@ -26,13 +27,13 @@ const database = new Database('http://my.database.url');
 
 // initialize the server
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  cache,
-  context,
-  dataSources: () => ({
-    arangoDataSource: new ArangoDataSource(database)
-  })
+	typeDefs,
+	resolvers,
+	cache,
+	context,
+	dataSources: () => ({
+		arangoDataSource: new ArangoDataSource(database),
+	}),
 });
 ```
 
@@ -41,38 +42,37 @@ Extend this class to create more targetted DataSources according to your needs:
 ```js
 // UserDataSource.js
 
-const { ArangoDataSource } = require('@danwkennedy/arango-datasource');
+const { ArangoDataSource } = require('@msandeepraj211/arango-datasource');
 
 module.exports = class UserDataSource extends ArangoDataSource {
+	// Pass the user collection to the DataSource
+	constructor(db, collection) {
+		super(db);
+		this.collection = collection;
+	}
 
-  // Pass the user collection to the DataSource
-  constructor(db, collection) {
-    super(db);
-    this.collection = collection;
-  }
-
-  // Build the query and call super.query
-  async getUsers() {
-    const query = aql`
+	// Build the query and call super.query
+	async getUsers() {
+		const query = aql`
       FOR user in ${this.collection}
       return user
     `;
 
-    return await this.query(query);
-  }
-}
+		return await this.query(query);
+	}
+};
 ```
 
 Basic query caching is available. Cache keys for queries are simply the query object's hash value using `object-hash`. This type of caching is mainly useful when using a persisted cache across machines (i.e. Redis instead of the default in memory cache) and works best for fetching common data that doesn't change very often.
 
 ### ArangoDocumentDataSource
 
-Uses the [DataLoader]() class to add batching and caching to fetching Arango Documents by their Id. This is especially useful as a `NodeDataSource`  as ArangoDb's default Id structure prepends the collection name to the `_key` making it so you don't need to pass the target collection the document datasource.
+Uses the [DataLoader]() class to add batching and caching to fetching Arango Documents by their Id. This is especially useful as a `NodeDataSource` as ArangoDb's default Id structure prepends the collection name to the `_key` making it so you don't need to pass the target collection the document datasource.
 
 ```js
 // index.js
 
-const { ArangoDocumentDataSource } = require('@danwkennedy/arango-datasource');
+const { ArangoDocumentDataSource } = require('@msandeepraj211/arango-datasource');
 const { Database } = require('arango-js');
 
 // initialize the db
@@ -80,25 +80,24 @@ const database = new Database('http://my.database.url');
 
 // initialize the server
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  cache,
-  context,
-  dataSources: () => ({
-    NodeDataSource: new ArangoDocumentDataSource(database)
-  })
+	typeDefs,
+	resolvers,
+	cache,
+	context,
+	dataSources: () => ({
+		NodeDataSource: new ArangoDocumentDataSource(database),
+	}),
 });
 
 // node/resolver.js
 
 module.exports = {
-  Query: {
-    node: async (_, { id }, { dataSources }) => {
-      return dataSources.NodeDataSource.load(id);
-    },
-  },
-}
-
+	Query: {
+		node: async (_, { id }, { dataSources }) => {
+			return dataSources.NodeDataSource.load(id);
+		},
+	},
+};
 ```
 
 ## Managers
@@ -112,7 +111,7 @@ Manages the lifecylc of documents in a document collection.
 ```js
 // index.js
 
-const { DocumentManager } = require('@danwkennedy/arango-datasource');
+const { DocumentManager } = require('@msandeepraj211/arango-datasource');
 const { Database } = require('arango-js');
 
 // initialize the db
@@ -121,13 +120,13 @@ const userCollection = database.collection('users');
 
 // initialize the server
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  cache,
-  context,
-  dataSources: () => ({
-    userDocumentManager: new DocumentManager(userCollection)
-  })
+	typeDefs,
+	resolvers,
+	cache,
+	context,
+	dataSources: () => ({
+		userDocumentManager: new DocumentManager(userCollection),
+	}),
 });
 ```
 
@@ -138,7 +137,7 @@ Manages the lifecycle of edges in a graph.
 ```js
 // index.js
 
-const { EdgeManager } = require('@danwkennedy/arango-datasource');
+const { EdgeManager } = require('@msandeepraj211/arango-datasource');
 const { Database } = require('arango-js');
 
 // initialize the db
@@ -147,13 +146,13 @@ const userFavoriteFoodCollection = database.edgeCollection('user_favorite_food')
 
 // initialize the server
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  cache,
-  context,
-  dataSources: () => ({
-    userDocumentManager: new EdgeManager(userFavoriteFoodCollection)
-  })
+	typeDefs,
+	resolvers,
+	cache,
+	context,
+	dataSources: () => ({
+		userDocumentManager: new EdgeManager(userFavoriteFoodCollection),
+	}),
 });
 ```
 
